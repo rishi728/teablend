@@ -17,7 +17,7 @@ export default function Sidebar() {
   const path = usePathname();
   return (
     <nav className="side">
-      <div className="brand">🍃 Assam Tea Co<small>BLEND ERP</small></div>
+      <div className="brand">🍃 Anand Tea Co<small>BLEND ERP</small></div>
       <div className="nav">
         {links.map((l, i) =>
           "grp" in l ? (
