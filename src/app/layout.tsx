@@ -4,7 +4,7 @@ import Sidebar from "@/components/Sidebar";
 import { ToastProvider } from "@/components/Toast";
 
 export const metadata: Metadata = {
-  title: "Assam Tea Co — Blend ERP",
+  title: "Anand Tea Co — Blend ERP",
   description: "Tea blend ERP + CRM",
 };
 
