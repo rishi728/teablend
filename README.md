@@ -1,4 +1,4 @@
-# Assam Tea Co — Blend ERP + CRM
+# Anand Tea Co — Blend ERP + CRM
 
 A production-ready Tea Blend ERP built with **Next.js 15 (App Router) + Prisma + PostgreSQL**.
 Manage tea types, standard & customer-specific blends, the blend costing engine, customers,
