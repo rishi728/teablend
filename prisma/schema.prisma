@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model TeaType {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  aroma       String?
+  texture     String?
+  flavor      String?
+  costPerKg   Float
+  supplier    String?
+  status      String   @default("active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  archived    Boolean  @default(false)
+
+  blendItems    BlendItem[]
+  recipeLogItems RecipeLogItem[]
+}
+
+model Blend {
+  id          String   @id @default(cuid())
+  name        String
+  code        String?
+  description String?
+  notes       String?
+  price       Float    @default(0)
+  // "standard" or "customer"
+  type        String   @default("standard")
+  customerId  String?
+  baseBlendId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  archived    Boolean  @default(false)
+
+  customer   Customer?   @relation(fields: [customerId], references: [id])
+  items      BlendItem[]
+  recipeLogs RecipeLog[]
+
+  @@index([type])
+  @@index([customerId])
+}
+
+model BlendItem {
+  id      String @id @default(cuid())
+  blendId String
+  teaId   String
+  ratio   Float
+
+  blend Blend   @relation(fields: [blendId], references: [id], onDelete: Cascade)
+  tea   TeaType @relation(fields: [teaId], references: [id])
+
+  @@index([blendId])
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  business  String
+  contact   String?
+  phone     String?
+  email     String?
+  gst       String?
+  address   String?
+  pref      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  archived  Boolean  @default(false)
+
+  blends     Blend[]
+  recipeLogs RecipeLog[]
+}
+
+model RecipeLog {
+  id          String   @id @default(cuid())
+  lot         String   @unique
+  batch       String?
+  blendId     String?
+  blendName   String
+  blendType   String   @default("standard")
+  customerId  String?
+  customerName String
+  quantity    Float
+  costSnapshot  Float
+  priceSnapshot Float
+  notes       String?
+  productionDate DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  blend    Blend?    @relation(fields: [blendId], references: [id])
+  customer Customer? @relation(fields: [customerId], references: [id])
+  items    RecipeLogItem[]
+
+  @@index([customerName])
+  @@index([blendName])
+  @@index([lot])
+}
+
+model RecipeLogItem {
+  id          String @id @default(cuid())
+  recipeLogId String
+  teaId       String?
+  teaName     String
+  ratio       Float
+  teaCostSnapshot Float
+
+  recipeLog RecipeLog @relation(fields: [recipeLogId], references: [id], onDelete: Cascade)
+  tea       TeaType?  @relation(fields: [teaId], references: [id])
+
+  @@index([recipeLogId])
+}

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assam Tea Co — Blend ERP</title>
+<style>
+:root{--bg:#f4f2ec;--surface:#fffdf8;--surface2:#efece2;--ink:#1f2a24;--ink2:#5a6b61;--line:#dcd8cc;--green:#1d5c43;--green-d:#123c2c;--green-l:#e3efe8;--amber:#b9821a;--danger:#a3352c;--radius:12px;--radius-s:8px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;--mono:'SF Mono',Menlo,Consolas,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.55}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px}
+.app{display:flex;min-height:100vh}
+.side{width:230px;background:var(--green-d);color:#dce8e0;padding:20px 0;flex-shrink:0;position:sticky;top:0;height:100vh}
+.brand{padding:0 22px 20px;font-size:18px;font-weight:600;color:#fff;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:14px}
+.brand small{display:block;font-size:11px;font-weight:400;color:#9fb8ac;letter-spacing:.5px}
+.nav a{display:flex;align-items:center;gap:11px;padding:10px 22px;color:#bcd0c7;text-decoration:none;font-size:14px;border-left:3px solid transparent;cursor:pointer}
+.nav a:hover{background:rgba(255,255,255,.05);color:#fff}
+.nav a.on{background:rgba(255,255,255,.09);color:#fff;border-left-color:var(--amber);font-weight:500}
+.nav .grp{padding:16px 22px 6px;font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:#7fa093}
+.main{flex:1;padding:28px 36px;max-width:1100px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.head h1{font-size:24px;font-weight:600}
+.head p{color:var(--ink2);font-size:14px;margin-top:2px}
+.btn{background:var(--green);color:#fff;border:none;padding:9px 16px;border-radius:var(--radius-s);font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:7px}
+.btn:hover{background:var(--green-d)}
+.btn.ghost{background:transparent;color:var(--green);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--surface)}
+.btn.sm{padding:5px 11px;font-size:13px}
+.btn.danger{background:transparent;color:var(--danger);border:1px solid var(--line)}
+.btn.danger:hover{background:#faecea}
+label{display:block;font-size:13px;color:var(--ink2);margin-bottom:5px;font-weight:500}
+input,select,textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:var(--radius-s);background:var(--surface);color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-l)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.grid{display:grid;gap:16px}
+.cols-2{grid-template-columns:1fr 1fr}.cols-3{grid-template-columns:repeat(3,1fr)}.cols-4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:760px){.cols-2,.cols-3,.cols-4{grid-template-columns:1fr}.side{width:64px}.brand span,.nav span,.nav .grp,.brand small{display:none}.main{padding:18px}}
+.metric{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+.metric .lbl{font-size:12px;color:var(--ink2);text-transform:uppercase;letter-spacing:.5px}
+.metric .val{font-size:26px;font-weight:600;margin-top:4px}
+.metric .val small{font-size:14px;color:var(--ink2);font-weight:400}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;padding:10px 12px;color:var(--ink2);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--line)}
+td{padding:11px 12px;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:none}
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:500}
+.pill.green{background:var(--green-l);color:var(--green-d)}.pill.amber{background:#f6ecd6;color:#7a5510}.pill.gray{background:var(--surface2);color:var(--ink2)}
+.mono{font-family:var(--mono);font-size:13px}
+.ratio-row{display:flex;gap:10px;align-items:center;margin-bottom:9px}
+.ratio-row select{flex:2}.ratio-row input{flex:1}
+.bar{height:7px;border-radius:4px;background:var(--surface2);overflow:hidden;margin:4px 0}
+.bar i{display:block;height:100%;background:var(--green)}.bar i.over{background:var(--danger)}
+.empty{text-align:center;padding:50px 20px;color:var(--ink2)}
+.empty .ic{font-size:40px;opacity:.4}
+.overlay{position:fixed;inset:0;background:rgba(20,30,25,.45);display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;z-index:50;overflow:auto}
+.modal{background:var(--surface);border-radius:var(--radius);max-width:680px;width:100%;padding:26px}
+.modal h2{font-size:20px;margin-bottom:4px}.modal .sub{color:var(--ink2);font-size:14px;margin-bottom:20px}
+.x{float:right;background:none;border:none;font-size:22px;color:var(--ink2);line-height:1;cursor:pointer}
+.section-t{font-size:13px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.5px;margin:22px 0 12px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.flex{display:flex;gap:10px;align-items:center}.between{justify-content:space-between}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--green-d);color:#fff;padding:11px 20px;border-radius:var(--radius-s);font-size:14px;z-index:99;opacity:0;transition:.3s;pointer-events:none}
+.toast.show{opacity:1}.toast.err{background:var(--danger)}
+.prod-card{background:var(--green-l);border:1px solid #bcd9c9;border-radius:var(--radius-s);padding:14px 16px}
+.spin{text-align:center;padding:40px;color:var(--ink2)}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="side">
+    <div class="brand"><span>🍃 Assam Tea Co</span><small>BLEND ERP</small></div>
+    <div class="nav" id="nav">
+      <a data-route="dashboard" class="on">📊 <span>Dashboard</span></a>
+      <div class="grp">Recipes</div>
+      <a data-route="standard">🫖 <span>Standard blends</span></a>
+      <a data-route="customer">👥 <span>Customer blends</span></a>
+      <a data-route="teas">🌿 <span>Tea types</span></a>
+      <div class="grp">Operations</div>
+      <a data-route="customers">📇 <span>Customers</span></a>
+      <a data-route="logs">📋 <span>Recipe logs</span></a>
+    </div>
+  </nav>
+  <main class="main" id="main"><div class="spin">Loading…</div></main>
+</div>
+<div id="modal-root"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const api = {
+  get:(u)=>fetch(u).then(r=>r.json()),
+  post:(u,b)=>fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}).then(handle),
+  put:(u,b)=>fetch(u,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}).then(handle),
+  del:(u)=>fetch(u,{method:'DELETE'}).then(r=>r.json()),
+};
+async function handle(r){const d=await r.json();if(!r.ok)throw new Error(d.error||'Request failed');return d}
+function money(n){return '₹'+(Math.round(n*100)/100).toLocaleString('en-IN')}
+function pct(n){return (Math.round(n*100)/100)+'%'}
+function margin(c,p){return p>0?Math.round((p-c)/p*100):0}
+function val(id){return document.getElementById(id).value.trim()}
+function toast(m,err){const t=document.getElementById('toast');t.textContent=m;t.className='toast show'+(err?' err':'');setTimeout(()=>t.className='toast',2400)}
+function modal(h){document.getElementById('modal-root').innerHTML=`<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal">${h}</div></div>`}
+function closeModal(){document.getElementById('modal-root').innerHTML=''}
+const M=document.getElementById('main');
+function H(t,s,b){return `<div class="head"><div><h1>${t}</h1><p>${s}</p></div>${b||''}</div>`}
+function emptyState(t,s){return `<div class="card empty"><div class="ic">🫙</div><h3 style="margin:8px 0 4px">${t}</h3><p>${s}</p></div>`}
+function loading(){M.innerHTML='<div class="spin">Loading…</div>'}
+
+let route='dashboard';
+function go(r){route=r;document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.route===r));render();window.scrollTo(0,0)}
+document.getElementById('nav').addEventListener('click',e=>{const a=e.target.closest('a');if(a)go(a.dataset.route)});
+
+async function render(){
+  loading();
+  try{ await ({dashboard:vDash,standard:()=>vBlends('standard'),customer:()=>vBlends('customer'),teas:vTeas,customers:vCustomers,logs:vLogs}[route])() }
+  catch(e){ M.innerHTML=`<div class="card empty"><h3>Couldn't load</h3><p>${e.message}</p></div>` }
+}
+
+/* DASHBOARD */
+async function vDash(){
+  const s=await api.get('/api/stats');
+  M.innerHTML=H('Dashboard','Overview of your blending operation')+`
+  <div class="grid cols-4" style="margin-bottom:16px">
+    <div class="metric"><div class="lbl">Customers</div><div class="val">${s.customers}</div></div>
+    <div class="metric"><div class="lbl">Tea types</div><div class="val">${s.teas}</div></div>
+    <div class="metric"><div class="lbl">Standard blends</div><div class="val">${s.std}</div></div>
+    <div class="metric"><div class="lbl">Customer blends</div><div class="val">${s.cust}</div></div></div>
+  <div class="grid cols-3" style="margin-bottom:24px">
+    <div class="metric"><div class="lbl">Production volume</div><div class="val">${s.vol}<small> kg</small></div></div>
+    <div class="metric"><div class="lbl">Revenue logged</div><div class="val">${money(s.rev)}</div></div>
+    <div class="metric"><div class="lbl">Most produced</div><div class="val" style="font-size:18px">${s.topBlend}</div></div></div>
+  <div class="card"><div class="flex between" style="margin-bottom:12px"><strong>Recent recipe logs</strong><button class="btn sm ghost" onclick="go('logs')">View all</button></div>
+  ${s.recent.length?`<table><thead><tr><th>Lot</th><th>Blend</th><th>Customer</th><th>Qty</th><th>Date</th></tr></thead><tbody>
+  ${s.recent.map(l=>`<tr><td class="mono">${l.lot}</td><td>${l.blendName}</td><td>${l.customerName}</td><td>${l.qty} kg</td><td>${new Date(l.createdAt).toLocaleDateString()}</td></tr>`).join('')}</tbody></table>`:`<div class="empty">No production logged yet.</div>`}</div>`;
+}
+
+/* TEA TYPES */
+async function vTeas(){
+  const teas=await api.get('/api/teas');
+  M.innerHTML=H('Tea types','Raw materials sourced from Assam','<button class="btn" onclick="editTea()">+ Add tea type</button>')+`
+  <div class="card"><table><thead><tr><th>Name</th><th>Profile</th><th>Supplier</th><th>Cost/kg</th><th>Status</th><th></th></tr></thead><tbody>
+  ${teas.map(t=>`<tr><td><strong>${t.name}</strong><br><span style="color:var(--ink2);font-size:13px">${t.desc}</span></td>
+  <td style="font-size:13px;color:var(--ink2)">${t.aroma} · ${t.texture} · ${t.flavor}</td>
+  <td>${t.supplier||'—'}</td><td class="mono">${money(t.cost)}</td>
+  <td><span class="pill ${t.status==='active'?'green':'gray'}">${t.status}</span></td>
+  <td><button class="btn sm ghost" onclick='editTea(${JSON.stringify(t.id)})'>Edit</button></td></tr>`).join('')}
+  </tbody></table></div>`;
+}
+async function editTea(id){
+  let t={name:'',desc:'',aroma:'',texture:'',flavor:'',cost:'',supplier:'',status:'active'};
+  if(id){const all=await api.get('/api/teas');t=all.find(x=>x.id===id)}
+  modal(`<button class="x" onclick="closeModal()">×</button><h2>${id?'Edit':'Add'} tea type</h2><p class="sub">Material used in blends</p>
+  <div class="grid cols-2"><div><label>Name</label><input id="te-name" value="${t.name}"></div><div><label>Cost per kg (₹)</label><input id="te-cost" type="number" value="${t.cost}"></div></div>
+  <div style="margin-top:14px"><label>Description</label><input id="te-desc" value="${t.desc}"></div>
+  <div class="grid cols-3" style="margin-top:14px"><div><label>Aroma</label><input id="te-aroma" value="${t.aroma}"></div><div><label>Texture</label><input id="te-texture" value="${t.texture}"></div><div><label>Flavor</label><input id="te-flavor" value="${t.flavor}"></div></div>
+  <div class="grid cols-2" style="margin-top:14px"><div><label>Supplier</label><input id="te-sup" value="${t.supplier||''}"></div><div><label>Status</label><select id="te-status"><option ${t.status==='active'?'selected':''}>active</option><option ${t.status==='inactive'?'selected':''}>inactive</option></select></div></div>
+  <div class="flex" style="margin-top:22px;justify-content:flex-end"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick='saveTea(${JSON.stringify(id||"")})'>Save</button></div>`);
+}
+async function saveTea(id){
+  const o={name:val('te-name'),cost:parseFloat(val('te-cost'))||0,desc:val('te-desc'),aroma:val('te-aroma'),texture:val('te-texture'),flavor:val('te-flavor'),supplier:val('te-sup'),status:val('te-status')};
+  if(!o.name)return alert('Name required');
+  try{ id?await api.put('/api/teas/'+id,o):await api.post('/api/teas',o); closeModal();toast('Tea type saved');render() }catch(e){toast(e.message,1)}
+}
+
+/* BLENDS */
+async function vBlends(type){
+  const [blends,custs]=await Promise.all([api.get('/api/blends?type='+type),api.get('/api/customers')]);
+  const isStd=type==='standard';
+  M.innerHTML=H(isStd?'Standard blends':'Customer blends',
+    isStd?'House recipes — workers reference these to produce':'Customised recipes linked to a specific customer',
+    `<button class="btn" onclick='editBlend(${JSON.stringify(type)})'>+ New ${isStd?'standard':'customer'} blend</button>`)+
+    (blends.length?`<div class="grid cols-2">${blends.map(b=>blendCard(b,type)).join('')}</div>`
+    :emptyState(`No ${isStd?'standard':'customer'} blends yet`,isStd?'Create your first house recipe.':'Customised versions of house blends for specific clients.'));
+}
+function blendCard(b,type){
+  const ratios=b.items.map(i=>(i.tea?i.tea.name.replace('Type ','T-'):'?')+' '+i.ratio+'%').join(' · ');
+  return `<div class="card"><div class="flex between"><strong>${b.name}</strong>${b.code?`<span class="pill gray mono">${b.code}</span>`:''}</div>
+  ${b.customer?`<p style="color:var(--ink2);font-size:13px;margin-top:2px">👤 ${b.customer.business}</p>`:''}
+  <p style="color:var(--ink2);font-size:13px;margin:6px 0">${b.desc||''}</p>
+  <p class="mono" style="margin:8px 0">${ratios}</p>
+  <div class="flex between" style="border-top:1px solid var(--line);padding-top:10px;margin-top:8px;font-size:14px">
+    <span>Cost <strong>${money(b.cost)}</strong>/kg</span>${b.price?`<span>Price <strong>${money(b.price)}</strong> · ${margin(b.cost,b.price)}%</span>`:''}</div>
+  <div class="flex" style="margin-top:12px;gap:8px;flex-wrap:wrap">
+    <button class="btn sm" onclick='produce(${JSON.stringify(b.id)})'>▶ Produce</button>
+    <button class="btn sm ghost" onclick='editBlend(${JSON.stringify(type)},${JSON.stringify(b.id)})'>Edit</button>
+    <button class="btn sm ghost" onclick='viewWorker(${JSON.stringify(b.id)})'>👷 Worker view</button>
+    <button class="btn sm danger" style="margin-left:auto" onclick='delBlend(${JSON.stringify(b.id)})'>Delete</button></div></div>`;
+}
+async function delBlend(id){if(!confirm('Delete this blend?'))return;await api.del('/api/blends/'+id);toast('Deleted');render()}
+
+let editItems=[];
+async function editBlend(type,id){
+  const [teas,custs,stds]=await Promise.all([api.get('/api/teas'),api.get('/api/customers'),api.get('/api/blends?type=standard')]);
+  let b=null;
+  if(id){b=await api.get('/api/blends/'+id)}
+  editItems=b?b.items.map(i=>({teaId:i.teaId,ratio:i.ratio})):[{teaId:'',ratio:''}];
+  window._teas=teas;
+  const custFields=type==='customer'?`<div class="grid cols-2"><div><label>Customer</label><select id="bl-customer">${custs.map(c=>`<option value="${c.id}" ${b&&b.customerId===c.id?'selected':''}>${c.business}</option>`).join('')}</select></div>
+  <div><label>Based on (optional)</label><select id="bl-base"><option value="">— none —</option>${stds.map(s=>`<option value="${s.id}" ${b&&b.baseId===s.id?'selected':''}>${s.name}</option>`).join('')}</select></div></div>`:'';
+  modal(`<button class="x" onclick="closeModal()">×</button><h2>${id?'Edit':'New'} ${type==='standard'?'standard':'customer'} blend</h2>
+  <p class="sub">${type==='standard'?'House recipe available to all workers':'Customised recipe linked to a customer'}</p>${custFields}
+  <div class="grid cols-2" style="margin-top:14px"><div><label>Blend name</label><input id="bl-name" value="${b?b.name:''}"></div><div><label>Code</label><input id="bl-code" value="${b?b.code||'':''}"></div></div>
+  <div style="margin-top:14px"><label>Description</label><input id="bl-desc" value="${b?b.desc||'':''}"></div>
+  <div class="section-t">Recipe ratios</div><div id="builder"></div>
+  <button class="btn ghost sm" onclick="addItem()" style="margin-top:6px">+ Add tea type</button>
+  <div id="builder-summary" style="margin-top:14px"></div>
+  <div class="grid cols-2" style="margin-top:14px"><div><label>Selling price (₹/kg)</label><input id="bl-price" type="number" value="${b?b.price||'':''}" oninput="drawSummary()"></div><div><label>Notes</label><input id="bl-notes" value="${b?b.notes||'':''}"></div></div>
+  <div class="flex" style="margin-top:22px;justify-content:flex-end"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick='saveBlend(${JSON.stringify(type)},${JSON.stringify(id||"")})'>Save blend</button></div>`);
+  drawBuilder();
+}
+function addItem(){editItems.push({teaId:'',ratio:''});drawBuilder()}
+function drawBuilder(){
+  const teas=window._teas.filter(t=>t.status==='active');
+  document.getElementById('builder').innerHTML=editItems.map((it,ix)=>`<div class="ratio-row">
+    <select onchange="setItem(${ix},'teaId',this.value)"><option value="">Select tea type</option>
+    ${teas.map(t=>`<option value="${t.id}" ${it.teaId===t.id?'selected':''}>${t.name} — ${money(t.cost)}/kg</option>`).join('')}</select>
+    <input type="number" min="0" step="0.1" value="${it.ratio}" placeholder="%" oninput="setItem(${ix},'ratio',this.value)">
+    <button class="btn sm danger" onclick="rmItem(${ix})">×</button></div>`).join('');
+  drawSummary();
+}
+function setItem(ix,k,v){editItems[ix][k]=v;drawSummary()}
+function rmItem(ix){editItems.splice(ix,1);drawBuilder()}
+function teaCost(id){const t=window._teas.find(x=>x.id===id);return t?t.cost:0}
+function drawSummary(){
+  const total=editItems.reduce((s,i)=>s+(parseFloat(i.ratio)||0),0);
+  const cost=editItems.reduce((s,i)=>s+teaCost(i.teaId)*((parseFloat(i.ratio)||0)/100),0);
+  const ok=Math.abs(total-100)<0.01&&editItems.length&&editItems.every(i=>i.teaId);
+  const price=parseFloat(document.getElementById('bl-price')?.value)||0;
+  document.getElementById('builder-summary').innerHTML=`<div class="bar"><i class="${total>100?'over':''}" style="width:${Math.min(total,100)}%"></i></div>
+  <div class="flex between" style="font-size:14px"><span>Total: <strong style="color:${ok?'var(--green)':'var(--danger)'}">${pct(total)}</strong> ${ok?'✓ valid':`(${pct(100-total)} left)`}</span>
+  <span>Blend cost: <strong>${money(cost)}</strong>/kg${price?` · margin ${margin(cost,price)}%`:''}</span></div>`;
+}
+async function saveBlend(type,id){
+  const items=editItems.filter(i=>i.teaId).map(i=>({teaId:i.teaId,ratio:parseFloat(i.ratio)||0}));
+  if(!val('bl-name'))return alert('Blend name required');
+  const total=items.reduce((s,i)=>s+i.ratio,0);
+  if(Math.abs(total-100)>0.01)return alert('Ratios must total 100% (got '+total+'%)');
+  const o={type,name:val('bl-name'),code:val('bl-code'),desc:val('bl-desc'),price:parseFloat(val('bl-price'))||0,notes:val('bl-notes'),items};
+  if(type==='customer'){o.customerId=document.getElementById('bl-customer').value;o.baseId=document.getElementById('bl-base').value||null}
+  try{ id?await api.put('/api/blends/'+id,o):await api.post('/api/blends',o); closeModal();toast('Blend saved');render() }catch(e){toast(e.message,1)}
+}
+
+/* WORKER VIEW */
+async function viewWorker(id){
+  const b=await api.get('/api/blends/'+id);window._wv=b;
+  const rows=b.items.map(i=>`<tr><td><strong>${i.tea.name}</strong><br><span style="font-size:12px;color:var(--ink2)">${i.tea.aroma} · ${i.tea.flavor}</span></td>
+    <td class="mono">${i.ratio}%</td><td class="mono">${money(i.tea.cost)}</td><td class="mono">${money(i.tea.cost*i.ratio/100)}</td></tr>`).join('');
+  modal(`<button class="x" onclick="closeModal()">×</button><h2>👷 Worker production card</h2><p class="sub">${b.name}${b.code?' · '+b.code:''}</p>
+  <div class="prod-card" style="margin-bottom:16px"><strong>How to make this blend</strong><p style="font-size:14px;margin-top:6px">Mix the tea types below in the exact percentages shown.</p></div>
+  <table><thead><tr><th>Tea type</th><th>Ratio</th><th>Cost/kg</th><th>Per 100kg</th></tr></thead><tbody>${rows}</tbody></table>
+  <div class="flex between" style="margin-top:16px;padding-top:12px;border-top:2px solid var(--line)"><strong>Blend cost</strong><strong class="mono">${money(b.cost)}/kg</strong></div>
+  <div style="margin-top:8px"><label>Scale to batch size (kg)</label><input type="number" id="wv-qty" value="100" oninput="wvScale()"></div>
+  <div id="wv-out" style="margin-top:12px"></div>
+  <div class="flex" style="margin-top:20px;justify-content:flex-end;gap:8px"><button class="btn ghost" onclick="window.print()">🖨 Print</button><button class="btn" onclick='closeModal();produce(${JSON.stringify(id)})'>▶ Log production</button></div>`);
+  wvScale();
+}
+function wvScale(){
+  const b=window._wv;const q=parseFloat(document.getElementById('wv-qty').value)||0;
+  document.getElementById('wv-out').innerHTML=`<div class="prod-card"><strong>Weigh out for ${q} kg:</strong><table style="margin-top:6px">
+  ${b.items.map(i=>`<tr><td>${i.tea.name}</td><td class="mono" style="text-align:right"><strong>${Math.round(q*i.ratio/100*100)/100} kg</strong></td></tr>`).join('')}</table></div>`;
+}
+
+/* PRODUCE -> LOG */
+async function produce(id){
+  const [b,custs,logs]=await Promise.all([api.get('/api/blends/'+id),api.get('/api/customers'),api.get('/api/logs')]);
+  window._pr=b;
+  const yr=new Date().getFullYear();const nextLot='LOT-'+yr+'-'+String(logs.length+1).padStart(5,'0');
+  modal(`<button class="x" onclick="closeModal()">×</button><h2>Log production run</h2><p class="sub">Creates an immutable recipe snapshot — costs & ratios frozen at production time</p>
+  <div class="grid cols-2"><div><label>Customer</label><select id="pr-cust"><option value="walk-in">Walk-in / stock</option>${custs.map(c=>`<option value="${c.id}" ${b.customerId===c.id?'selected':''}>${c.business}</option>`).join('')}</select></div>
+  <div><label>Lot number</label><input id="pr-lot" value="${nextLot}"></div></div>
+  <div class="grid cols-2" style="margin-top:14px"><div><label>Quantity (kg)</label><input id="pr-qty" type="number" value="250" oninput="prCalc()"></div><div><label>Selling price (₹/kg)</label><input id="pr-price" type="number" value="${b.price||''}"></div></div>
+  <div class="section-t">Material breakdown</div><div id="pr-mat"></div>
+  <div style="margin-top:14px"><label>Notes</label><input id="pr-notes" placeholder="e.g. customer requested stronger aroma"></div>
+  <div class="flex" style="margin-top:22px;justify-content:flex-end"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick='saveLog(${JSON.stringify(id)})'>Save recipe log</button></div>`);
+  prCalc();
+}
+function prCalc(){
+  const b=window._pr;const q=parseFloat(document.getElementById('pr-qty').value)||0;
+  document.getElementById('pr-mat').innerHTML=`<table><thead><tr><th>Tea type</th><th>Ratio</th><th>Required</th></tr></thead><tbody>
+  ${b.items.map(i=>`<tr><td>${i.tea.name}</td><td class="mono">${i.ratio}%</td><td class="mono"><strong>${Math.round(q*i.ratio/100*100)/100} kg</strong></td></tr>`).join('')}</tbody></table>`;
+}
+async function saveLog(id){
+  const o={blendId:id,customerId:document.getElementById('pr-cust').value,lot:val('pr-lot'),qty:parseFloat(val('pr-qty'))||0,price:parseFloat(val('pr-price'))||0,notes:val('pr-notes')};
+  if(!o.lot)return alert('Lot number required');
+  try{ const log=await api.post('/api/logs',o); closeModal();toast('Recipe log saved: '+log.lot);go('logs') }catch(e){toast(e.message,1)}
+}
+
+/* CUSTOMERS */
+async function vCustomers(){
+  const cs=await api.get('/api/customers');
+  M.innerHTML=H('Customers','Your CRM','<button class="btn" onclick="editCust()">+ Add customer</button>')+`
+  <div class="grid cols-2">${cs.map(c=>`<div class="card"><div class="flex between"><strong>${c.business}</strong><button class="btn sm ghost" onclick='editCust(${JSON.stringify(c.id)})'>Edit</button></div>
+  <p style="color:var(--ink2);font-size:13px;margin:4px 0">${c.contact} · ${c.phone}</p><p style="color:var(--ink2);font-size:13px">${c.email}</p>
+  <p style="font-size:13px;margin-top:6px">GST: <span class="mono">${c.gst||'—'}</span></p><p style="font-size:13px;color:var(--ink2)">📍 ${c.address||'—'}</p>
+  <div class="flex between" style="border-top:1px solid var(--line);margin-top:10px;padding-top:10px;font-size:14px"><span>${c.orderCount} orders</span><span>Revenue <strong>${money(c.revenue)}</strong></span></div></div>`).join('')}</div>`;
+}
+async function editCust(id){
+  let c={business:'',contact:'',phone:'',email:'',gst:'',address:'',pref:''};
+  if(id){const all=await api.get('/api/customers');c=all.find(x=>x.id===id)}
+  modal(`<button class="x" onclick="closeModal()">×</button><h2>${id?'Edit':'Add'} customer</h2><p class="sub">CRM record</p>
+  <div class="grid cols-2"><div><label>Business name</label><input id="cu-business" value="${c.business}"></div><div><label>Contact name</label><input id="cu-contact" value="${c.contact}"></div></div>
+  <div class="grid cols-2" style="margin-top:14px"><div><label>Phone</label><input id="cu-phone" value="${c.phone}"></div><div><label>Email</label><input id="cu-email" value="${c.email}"></div></div>
+  <div class="grid cols-2" style="margin-top:14px"><div><label>GST number</label><input id="cu-gst" value="${c.gst}"></div><div><label>Preference</label><input id="cu-pref" value="${c.pref||''}"></div></div>
+  <div style="margin-top:14px"><label>Address</label><input id="cu-address" value="${c.address}"></div>
+  <div class="flex" style="margin-top:22px;justify-content:flex-end"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick='saveCust(${JSON.stringify(id||"")})'>Save</button></div>`);
+}
+async function saveCust(id){
+  const o={business:val('cu-business'),contact:val('cu-contact'),phone:val('cu-phone'),email:val('cu-email'),gst:val('cu-gst'),address:val('cu-address'),pref:val('cu-pref')};
+  if(!o.business)return alert('Business name required');
+  try{ id?await api.put('/api/customers/'+id,o):await api.post('/api/customers',o); closeModal();toast('Customer saved');render() }catch(e){toast(e.message,1)}
+}
+
+/* LOGS */
+async function vLogs(){
+  M.innerHTML=H('Recipe logs','Immutable production history — search by customer, lot, or blend','')+`
+  <input id="log-search" placeholder="🔍 Search customer, lot number, or blend..." oninput="drawLogs()" style="margin-bottom:16px"><div id="log-list"></div>`;
+  drawLogs();
+}
+let _logTimer;
+function drawLogs(){clearTimeout(_logTimer);_logTimer=setTimeout(async()=>{
+  const q=document.getElementById('log-search')?.value||'';
+  const logs=await api.get('/api/logs?q='+encodeURIComponent(q));
+  const el=document.getElementById('log-list');
+  if(!logs.length){el.innerHTML=emptyState('No recipe logs','Produce a blend from the Standard or Customer blends tab.');return}
+  el.innerHTML=logs.map(l=>{
+    const ratios=l.items.map(r=>r.teaName.replace('Type ','T-')+' '+r.ratio+'%').join(' · ');
+    return `<div class="card" style="margin-bottom:12px"><div class="flex between">
+    <div><strong>${l.blendName}</strong> <span class="pill ${l.blendType==='customer'?'amber':'green'}">${l.blendType}</span></div>
+    <span class="pill gray mono">${l.lot}</span></div>
+    <p style="color:var(--ink2);font-size:13px;margin:6px 0">👤 ${l.customerName} · ${l.qty} kg · ${new Date(l.createdAt).toLocaleString()}</p>
+    <p class="mono" style="margin:6px 0">${ratios}</p>
+    <div class="flex between" style="border-top:1px solid var(--line);padding-top:10px;margin-top:8px;font-size:14px">
+    <span>Cost <strong>${money(l.cost)}</strong>/kg ${l.price?`· Price <strong>${money(l.price)}</strong> · ${margin(l.cost,l.price)}%`:''}</span>
+    <button class="btn sm danger" onclick='delLog(${JSON.stringify(l.id)})'>Delete</button></div>
+    ${l.notes?`<p style="font-size:13px;color:var(--ink2);font-style:italic;margin-top:8px">📝 ${l.notes}</p>`:''}</div>`;
+  }).join('');
+},150)}
+async function delLog(id){if(!confirm('Delete this log?'))return;await api.del('/api/logs/'+id);toast('Deleted');drawLogs()}
+
+render();
+</script>
+</body>
+</html>
